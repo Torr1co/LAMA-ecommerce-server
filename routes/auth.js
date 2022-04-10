@@ -1,16 +1,19 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const CryptoJs = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
-// REGISTER
+//REGISTER
 router.post("/register", async (req, res) => {
   const newUser = new User({
     username: req.body.username,
     email: req.body.email,
-    password: CryptoJs.AES.encrypt(req.body.password, process.env.PASS_KEY),
+    password: CryptoJs.AES.encrypt(
+      req.body.password,
+      process.env.PASS_KEY
+    ).toString(),
   });
 
-  //guardar en la base de datos
   try {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
@@ -19,33 +22,41 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// LOGIN
+//LOGIN
+
 router.post("/login", async (req, res) => {
   try {
-    // encuentra el usuario
-    const user = await User.findOne({ username: req.body.username });
-    if (!user) {
-      res.status(401).json("Wrong credentials");
-      return;
-    }
+    const user = await User.findOne({
+      userName: req.body.username,
+    });
 
-    console.log("there is user");
+    !user && res.status(401).json("Wrong User Name");
 
     const hashedPassword = CryptoJs.AES.decrypt(
       user.password,
       process.env.PASS_KEY
     );
+
     const originalPassword = hashedPassword.toString(CryptoJs.enc.Utf8);
 
-    if (originalPassword !== req.body.password) {
-      res.status(401).json("Wrong credentials");
-      return;
-    }
+    const inputPassword = req.body.password;
+
+    originalPassword != inputPassword && res.status(401).json("Wrong Password");
+
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.JWT_KEY,
+      { expiresIn: "3d" }
+    );
 
     const { password, ...others } = user._doc;
-    res.status(200).json(others);
+    res.status(200).json({ ...others, accessToken });
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 module.exports = router;
