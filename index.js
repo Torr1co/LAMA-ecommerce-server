@@ -4,8 +4,10 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 // RUTAS
-const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/users");
+const productRoutes = require("./routes/products");
+
 dotenv.config();
 
 // conectamos con la url que nos dieron, cambiar contrase;a y nombre del proyecto de la url defecto
@@ -22,7 +24,9 @@ mongoose
 app.use(express.json());
 // armamos un enrutado a /api/users/[userRoutes]
 app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
+
 // ES NECESARIO EL PUERTO PARA USAR MONGODB
 app.listen(process.env.MONGO_PORT || 5000, () => {
   console.log("backend running");
