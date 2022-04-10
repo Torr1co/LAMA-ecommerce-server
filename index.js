@@ -6,6 +6,8 @@ const dotenv = require("dotenv");
 // RUTAS
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
+const cartRoutes = require("./routes/cart");
+const orderRoutes = require("./routes/orders");
 const productRoutes = require("./routes/products");
 
 dotenv.config();
@@ -26,6 +28,8 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 // ES NECESARIO EL PUERTO PARA USAR MONGODB
 app.listen(process.env.MONGO_PORT || 5000, () => {
