@@ -3,6 +3,8 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+// IMPORTANTE PONERLO ARRIBA DE LAS RUTAS
+dotenv.config();
 // RUTAS
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
@@ -10,8 +12,6 @@ const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/orders");
 const productRoutes = require("./routes/products");
 const stripeRoutes = require("./routes/stripe");
-
-dotenv.config();
 
 // conectamos con la url que nos dieron, cambiar contrase;a y nombre del proyecto de la url defecto
 mongoose
