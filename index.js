@@ -2,13 +2,14 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-
+const cors = require("cors");
 // RUTAS
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/orders");
 const productRoutes = require("./routes/products");
+const stripeRoutes = require("./routes/stripe");
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ mongoose
   });
 
 //permite que la aplicacion reciba post requests
+app.use(cors());
 app.use(express.json());
 // armamos un enrutado a /api/users/[userRoutes]
 app.use("/api/users", userRoutes);
@@ -30,6 +32,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 // ES NECESARIO EL PUERTO PARA USAR MONGODB
 app.listen(process.env.MONGO_PORT || 5000, () => {
