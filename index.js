@@ -34,7 +34,5 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/stripe", stripeRoutes);
 
-// ES NECESARIO EL PUERTO PARA USAR MONGODB
-app.listen(process.env.MONGO_PORT || 5000, () => {
-  console.log("backend running");
-});
+// ES NECESARIO EL PUERTO
+app.listen(process.env.PORT || 5000);
