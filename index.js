@@ -34,5 +34,8 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/stripe", stripeRoutes);
 
-// ES NECESARIO EL PUERTO
-app.listen(process.env.PORT || 5000);
+// ES NECESARIO EL EVENTO DE ESCUCHA
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, "0.0.0.0", function () {
+  console.log("Server started.......");
+});
